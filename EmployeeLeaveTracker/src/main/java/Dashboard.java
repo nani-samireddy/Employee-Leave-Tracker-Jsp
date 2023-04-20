@@ -36,8 +36,12 @@ public class Dashboard extends HttpServlet {
 		// getting all Emp details
 		try {
 			req.setAttribute("empsDetails", db.getEmployeNames());
+			
+			
 			if (requestMode != null) {
+				
 				switch (requestMode) {
+				
 					case "ViewLeaves":
 						String signum = req.getParameter("selectedEmp");
 						Employee e;
@@ -49,6 +53,7 @@ public class Dashboard extends HttpServlet {
 						req.setAttribute("noLeaves", emp_leaves==null);
 						tab = "ViewLeaves";
 						break;
+						
 					case "AddLeave":
 						String signum1 = req.getParameter("selectedEmp");
 						Employee e1;
@@ -61,6 +66,12 @@ public class Dashboard extends HttpServlet {
 						db.addLeave(new Leave(00,signum1, from_date,to_date, type, e1.name, mode, reason));
 						tab = "AddLeave";
 						break;
+						
+					case "DeleteLeave":
+						int leaveId = Integer.parseInt(req.getParameter("leaveId"));
+						db.deleteLeave(leaveId);
+						break;
+						
 					case "Login":
 						String username = req.getParameter("loginSignum");
 						String password = req.getParameter("loginPassword");
@@ -74,6 +85,7 @@ public class Dashboard extends HttpServlet {
 							tab = "Manager";
 						}
 						break;
+						
 					case "ViewAllLeaves":
 						System.out.println("gettting all leaves");
 						String signum2 = req.getParameter("selectedEmp");

@@ -155,5 +155,15 @@ public class DatabaseService {
 		return false;
 
 	}
+	
+	public void deleteLeave(int leaveId) throws ClassNotFoundException, SQLException {
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+		String query = "delete from emp_leaves where leaveid in (?)";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setInt(1, leaveId);
+		 ps.executeUpdate();
+		
+	}
 
 }

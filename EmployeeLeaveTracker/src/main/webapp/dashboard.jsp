@@ -244,7 +244,10 @@
 
 						return true;
 					}
-
+					
+					function confirmDelete(){
+						return confirm("Confirm to delete leave");
+					}
 
 				</script>
 			</head>
@@ -349,8 +352,12 @@
 																	<button disabled>Delete</button>
 																</c:if>
 																<c:if test="${leave.canBeDeleted==true}">
-																	<button
-																		onclick="deleteLeave(${leave})">Delete</button>
+																	<form  method="post" action="Dashboard" onsubmit="return confirmDelete()">
+																	<input type="hidden" name="requestMode" value="DeleteLeave" id="vl">
+																	<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
+
+																	<button type="submit">Delete</button>
+																	</form>
 																</c:if>
 
 															</td>

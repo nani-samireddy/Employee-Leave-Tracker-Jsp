@@ -11,6 +11,14 @@ public class Leave {
 	String mode;
 	String reason;
 	int leaveId;
+	public int getLeaveId() {
+		return leaveId;
+	}
+
+	public void setLeaveId(int leaveId) {
+		this.leaveId = leaveId;
+	}
+
 	boolean canBeDeleted;
 
 	public boolean isCanBeDeleted() {
