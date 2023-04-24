@@ -36,24 +36,23 @@ public class Dashboard extends HttpServlet {
 		// getting all Emp details
 		try {
 			req.setAttribute("empsDetails", db.getEmployeNames());
-			
-			
+
 			if (requestMode != null) {
-				
+
 				switch (requestMode) {
-				
+
 					case "ViewLeaves":
 						String signum = req.getParameter("selectedEmp");
 						Employee e;
-						Leave[] emp_leaves= db.getEmployeeLeaves(signum, false);
+						Leave[] emp_leaves = db.getEmployeeLeaves(signum, false);
 						e = db.getEmployeDetails(signum);
 						req.setAttribute("sname", e.getName());
 						req.setAttribute("ssignum", e.getSignum());
-						req.setAttribute("empLeaves",emp_leaves);
-						req.setAttribute("noLeaves", emp_leaves==null);
+						req.setAttribute("empLeaves", emp_leaves);
+						req.setAttribute("noLeaves", emp_leaves == null);
 						tab = "ViewLeaves";
 						break;
-						
+
 					case "AddLeave":
 						String signum1 = req.getParameter("selectedEmp");
 						Employee e1;
@@ -63,34 +62,34 @@ public class Dashboard extends HttpServlet {
 						String type = req.getParameter("type");
 						String mode = req.getParameter("mode");
 						String reason = req.getParameter("reason");
-						db.addLeave(new Leave(00,signum1, from_date,to_date, type, e1.name, mode, reason,0));
+						db.addLeave(new Leave(00, signum1, from_date, to_date, type, e1.name, mode, reason, 0));
 						tab = "AddLeave";
 						break;
-						
+
 					case "EditLeave":
-						tab="EditLeave";
+						tab = "EditLeave";
 						int leaveId = Integer.parseInt(req.getParameter("leaveId"));
 						Leave leave = db.getLeave(leaveId);
 						req.setAttribute("leave", leave);
 						break;
-						
+
 					case "UpdateLeave":
 						tab = "ViewLeaves";
-						 leaveId = Integer.parseInt(req.getParameter("leaveId"));
-						 String fromDate = req.getParameter("from_date");
-						 String toDate = req.getParameter("to_date");
+						leaveId = Integer.parseInt(req.getParameter("leaveId"));
+						String fromDate = req.getParameter("from_date");
+						String toDate = req.getParameter("to_date");
 						Leave leave1 = db.getLeave(leaveId);
 						leave1.setFrom_date(fromDate);
 						leave1.setTo_date(toDate);
-						
+
 						db.updateLeave(leave1);
 						break;
-						
+
 					case "DeleteLeave":
-						 leaveId = Integer.parseInt(req.getParameter("leaveId"));
+						leaveId = Integer.parseInt(req.getParameter("leaveId"));
 						db.deleteLeave(leaveId);
 						break;
-						
+
 					case "Login":
 						String username = req.getParameter("loginSignum");
 						String password = req.getParameter("loginPassword");
@@ -104,21 +103,21 @@ public class Dashboard extends HttpServlet {
 							tab = "Manager";
 						}
 						break;
-						
+
 					case "ViewAllLeaves":
 						System.out.println("gettting all leaves");
 						String signum2 = req.getParameter("selectedEmp");
 						Employee e2;
-						Leave[] emp_allLeaves= db.getEmployeeLeaves(signum2, true);
+						Leave[] emp_allLeaves = db.getEmployeeLeaves(signum2, true);
 						e2 = db.getEmployeDetails(signum2);
 						req.setAttribute("msname", e2.getName());
 						req.setAttribute("mssignum", e2.getSignum());
 						req.setAttribute("empAllLeaves", emp_allLeaves);
 						req.setAttribute("managerStatus", "viewAllLeaves");
-						req.setAttribute("noLeaves", emp_allLeaves==null);
+						req.setAttribute("noLeaves", emp_allLeaves == null);
 						tab = "Manager";
 						break;
-					
+
 				}
 			}
 
@@ -130,7 +129,7 @@ public class Dashboard extends HttpServlet {
 		if (tab != null) {
 			req.setAttribute("tabName", tab);
 			System.out.println(tab);
-			
+
 		} else {
 			req.setAttribute("tabName", "Default");
 		}
@@ -140,4 +139,3 @@ public class Dashboard extends HttpServlet {
 	}
 
 }
-

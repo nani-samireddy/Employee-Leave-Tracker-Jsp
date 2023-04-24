@@ -8,11 +8,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class EmailService {
-	public static boolean sendEmail(String to, String from, String subject, String text) {
+    public static boolean sendEmail(String to, String from, String subject, String text) {
         boolean flag = false;
 
-        //logic
-        //smtp properties
+        // logic
+        // smtp properties
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", true);
         properties.put("mail.smtp.starttls.enable", true);
@@ -22,7 +22,7 @@ public class EmailService {
         String username = "adikusupudi@gmail.com";
         String password = "fmbeedvvttansbyd";
 
-        //session
+        // session
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -44,40 +44,27 @@ public class EmailService {
         }
 
         return flag;
-        
+
     }
 
-    public static void sendLeaveEmail(Leave leave,boolean update) {
-    	String to = "kusupudiadithi@gmail.com";
+    public static void sendLeaveEmail(Leave leave, boolean update) {
+        String to = "kusupudiadithi@gmail.com";
         String from = "adikusupudi@gmail.com";
         String subject;
-        if(update) {
-            subject = "Leave update of "+leave.name+"("+leave.signum+")";
+        if (update) {
+            subject = "Leave update of " + leave.name + "(" + leave.signum + ")";
 
-        }else {
-         subject = "Leave of "+leave.name+"("+leave.signum+")";
+        } else {
+            subject = "Leave of " + leave.name + "(" + leave.signum + ")";
         }
-        String text = "Name: "+leave.name+"\nSignum: "+leave.signum+"\nFrom Date: "+leave.from_date+"\nTo Date: "+leave.to_date+"\nReason: "+leave.reason;
+        String text = "Name: " + leave.name + "\nSignum: " + leave.signum + "\nFrom Date: " + leave.from_date
+                + "\nTo Date: " + leave.to_date + "\nReason: " + leave.reason;
         boolean b = sendEmail(to, from, subject, text);
         if (b) {
             System.out.println("Email is sent successfully");
         } else {
             System.out.println("There is problem in sending email");
         }
-        
-                 
+
+    }
 }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-	

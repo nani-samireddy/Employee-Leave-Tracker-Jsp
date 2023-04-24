@@ -5,7 +5,8 @@
 			<html>
 
 			<head>
-				<title></title>
+				<title>Employee Dashboard</title>
+				<link rel="stylesheet" href="style.css">
 				<link rel="stylesheet"
 					href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 				<link href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet"
@@ -15,6 +16,8 @@
 
 				<style>
 					@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
 
 
 					body {
@@ -244,8 +247,8 @@
 
 						return true;
 					}
-					
-					function confirmDelete(){
+
+					function confirmDelete() {
 						return confirm("Confirm to delete leave");
 					}
 
@@ -334,11 +337,11 @@
 												<h3>${sname}(${ssignum})</h3> <br>
 												<table>
 													<tr>
-														<td> <b>From Date</b> </td>
-														<td> <b>To Date</b> </td>
-														<td><b>Half/Full</b></td>
-														<td><b>Actions</b></td>
-														<td><b>Number Of Days</b></td>
+														<th> <b>From Date</b> </th>
+														<th> <b>To Date</b> </th>
+														<th><b>Half/Full</b></th>
+														<th><b>Actions</b></th>
+														<th><b>Number Of Days</b></th>
 													</tr>
 													<c:forEach items="${empLeaves}" var="leave">
 														<tr>
@@ -351,11 +354,14 @@
 																	<button disabled>Edit</button>
 																</c:if>
 																<c:if test="${leave.canBeEdited==true}">
-																	<form  method="post" action="Dashboard" onsubmit="return confirm('confirm to edit leave')">
-																	<input type="hidden" name="requestMode" value="EditLeave" id="vl">
-																	<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
+																	<form method="post" action="Dashboard"
+																		onsubmit="return confirm('confirm to edit leave')">
+																		<input type="hidden" name="requestMode"
+																			value="EditLeave" id="vl">
+																		<input type="hidden" name="leaveId"
+																			value="${leave.leaveId}" id="vl">
 
-																	<button type="submit">Edit</button>
+																		<button type="submit">Edit</button>
 																	</form>
 																</c:if>
 
@@ -363,11 +369,14 @@
 																	<button disabled>Delete</button>
 																</c:if>
 																<c:if test="${leave.canBeDeleted==true}">
-																	<form  method="post" action="Dashboard" onsubmit="return confirm('confirm to delete leave')">
-																	<input type="hidden" name="requestMode" value="DeleteLeave" id="vl">
-																	<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
+																	<form method="post" action="Dashboard"
+																		onsubmit="return confirm('confirm to delete leave')">
+																		<input type="hidden" name="requestMode"
+																			value="DeleteLeave" id="vl">
+																		<input type="hidden" name="leaveId"
+																			value="${leave.leaveId}" id="vl">
 
-																	<button type="submit">Delete</button>
+																		<button type="submit">Delete</button>
 																	</form>
 																</c:if>
 
@@ -416,11 +425,12 @@
 													From Date:
 												</td>
 												<td>
-													
-													
-													
-													<input type="date" name="from_date" id="from_date" required />
-															
+
+
+
+													<input type="date" name="from_date" id="from_date"
+														onchange="setMinDate(event);" required />
+
 													<br><br>
 												</td>
 											</tr>
@@ -437,7 +447,7 @@
 													Leave Type:
 												</td>
 												<td>
-													<select name="type" id="leaveMode" required><br> <br>
+													<select name="type" id="leaveType" required><br> <br>
 														<option value="" disabled selected hidden>Select Leave Type
 														</option>
 
@@ -451,7 +461,7 @@
 													CL/PL/EL:
 												</td>
 												<td>
-													<select name="mode" id="leaveType" required><br> <br>
+													<select name="mode" id="leaveMode" required><br> <br>
 														<option value="" disabled selected hidden>Select Leave Type
 														</option>
 
@@ -481,7 +491,7 @@
 									</form>
 								</section>
 							</c:when>
-							
+
 							<c:when test="${tabName=='EditLeave'}">
 								<!-- 
 											Edit leave
@@ -492,13 +502,15 @@
 									<form method="post" action="Dashboard" onsubmit="return validate();">
 										<h1>Edit leave of ${leave.name}</h1>
 										<table>
-											
+
 											<tr>
 												<td>
 													From Date:
 												</td>
 												<td>
-													<input type="date" name="from_date" id="from_date" value="${leave.from_date}" required onchange="setMinDate(event);" />
+													<input type="date" name="from_date" id="from_date"
+														value="${leave.from_date}" required
+														onchange="setMinDate(event);" />
 													<br><br>
 												</td>
 											</tr>
@@ -507,7 +519,8 @@
 													To Date:
 												</td>
 												<td>
-													<input type="date" name="to_date" id="to_date" value="${leave.to_date}" required  /> 
+													<input type="date" name="to_date" id="to_date"
+														value="${leave.to_date}" required />
 													<br><br>
 												</td>
 											</tr>
@@ -516,8 +529,8 @@
 													Leave Type:
 												</td>
 												<td>
-													<select name="type" id="leaveMode" required disabled>
-														<option value="${leave.type}" selected >${leave.type}</option>
+													<select name="type" id="leaveType" required disabled>
+														<option value="${leave.type}" selected>${leave.type}</option>
 													</select>
 												</td>
 											</tr>
@@ -526,8 +539,8 @@
 													CL/PL/EL:
 												</td>
 												<td>
-													<select name="mode" id="leaveType" required disabled><br> <br>
-														<option value="${leave.mode}" selected >${leave.mode}</option>
+													<select name="mode" id="leaveMode" required disabled><br> <br>
+														<option value="${leave.mode}" selected>${leave.mode}</option>
 													</select>
 												</td>
 											</tr>
@@ -536,14 +549,16 @@
 													Reason:
 												</td>
 												<td>
-													<textarea disabled name="reason" placeholder="reason"  required>${leave.reason}</textarea>
+													<textarea disabled name="reason" placeholder="reason"
+														required>${leave.reason}</textarea>
 												</td>
 											</tr>
 											<tr>
 												<td>
-												
-												<input type="hidden" name="requestMode" value="UpdateLeave" id="vl">
-												<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
+
+													<input type="hidden" name="requestMode" value="UpdateLeave" id="vl">
+													<input type="hidden" name="leaveId" value="${leave.leaveId}"
+														id="vl">
 
 													<input type="submit" value="Updated Leave" />
 												</td>
@@ -554,8 +569,8 @@
 									</form>
 								</section>
 							</c:when>
-							
-							
+
+
 
 							<c:when test="${tabName=='Manager'}">
 
@@ -618,6 +633,7 @@
 																<td> <b>Half/Full</b> </td>
 																<td> <b>CL/PL/EL</b> </td>
 																<td> <b>Reason</b> </td>
+																<td> <b>Number Of Days</b> </td>
 															</tr>
 															<c:forEach items="${empAllLeaves}" var="leave">
 																<tr>
@@ -626,6 +642,7 @@
 																	<td>${leave.type}</td>
 																	<td>${leave.mode}</td>
 																	<td>${leave.reason}</td>
+																	<td>${leave.numberOfDays}</td>
 																</tr>
 															</c:forEach>
 														</table>
@@ -668,24 +685,44 @@
 						$('#to_date').attr('min', today);
 						$('#from_date').attr('min', today);
 					}
-					
-					$("from_date").on("change",function (){
-						var fromDate = new Date($(this).val());
-						var dd = String(fromDate.getDate()).padStart(2, '0');
-						var mm = String(fromDate.getMonth() + 1).padStart(2, '0');
-						var yyyy = fromDate.getFullYear();
-						var min = yyyy + '-' + mm + '-' + dd;
-						$('#to_date').attr('min', min);
 
+
+
+
+					function setMinDate(e) {
+						$("#to_date").attr("min", e.target.value);
+						$("#to_date").attr("value", "");
+
+					}
+
+					function setLeaveType(e) {
+						var fromDate = $("#from_date").val();
+						var toDate = $("#to_date").val();
+						if (fromDate != toDate) {
+							$("select option:contains(HALF)").attr("disabled", "disabled");
+						} else {
+							$("select option:contains(HALF)").prop("disabled", false);
+						}
+
+
+					}
+
+					$(document).ready(function () {
+						$("#to_date").change(function () {
+							var fromDate = $("#from_date").val();
+							var toDate = $(this).val();
+							console.log(fromDate === toDate);
+							if (fromDate === toDate) {
+								$("select option:contains(HALF)").attr("disabled", false);
+							} else {
+
+								$("select option:contains(HALF)").attr("disabled", true);
+							}
+
+						})
 					});
 
-					
-					function setMinDate(e){
-						$("#to_date").attr("min",e.target.value);
-						$("#to_date").attr("value","");
-						
-					}
-					
+
 
 				</script>
 			</body>

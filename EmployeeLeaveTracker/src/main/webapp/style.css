@@ -1,0 +1,16 @@
+td {
+  padding: 10px 32px;
+
+  font-size: 0.8rem;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #b0b0b0;
+  color: #000;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  padding: 20px 60px;
+}

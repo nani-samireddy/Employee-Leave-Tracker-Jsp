@@ -15,11 +15,8 @@ public class Leave {
 	boolean canBeDeleted;
 	boolean canBeEdited;
 
-
-
-
 	public Leave(int leaveId, String signum, String from_date, String to_date, String type, String name, String mode,
-			String reason,int numberOfDays) {
+			String reason, int numberOfDays) {
 		super();
 		this.leaveId = leaveId;
 		this.from_date = from_date;
@@ -53,13 +50,12 @@ public class Leave {
 			} else {
 				this.canBeDeleted = true;
 			}
-			
+
 			if (today.compareTo(toDate) < 0) {
 				this.canBeEdited = true;
 			} else {
 				this.canBeEdited = false;
 			}
-			
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -67,17 +63,14 @@ public class Leave {
 		}
 
 	}
-	
 
 	public int getNumberOfDays() {
 		return numberOfDays;
 	}
 
-
 	public void setNumberOfDays(int numberOfDays) {
 		this.numberOfDays = numberOfDays;
 	}
-
 
 	public boolean isCanBeDeleted() {
 		return canBeDeleted;
@@ -86,6 +79,7 @@ public class Leave {
 	public void setCanBeDeleted(boolean canBeDeleted) {
 		this.canBeDeleted = canBeDeleted;
 	}
+
 	public int getLeaveId() {
 		return leaveId;
 	}
@@ -93,7 +87,6 @@ public class Leave {
 	public void setLeaveId(int leaveId) {
 		this.leaveId = leaveId;
 	}
-	
 
 	public String getReason() {
 		return reason;
@@ -151,11 +144,9 @@ public class Leave {
 		this.name = name;
 	}
 
-	
 	public boolean isCanBeEdited() {
 		return canBeEdited;
 	}
-
 
 	public void setCanBeEdited(boolean canBeEdited) {
 		this.canBeEdited = canBeEdited;
