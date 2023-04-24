@@ -67,8 +67,27 @@ public class Dashboard extends HttpServlet {
 						tab = "AddLeave";
 						break;
 						
-					case "DeleteLeave":
+					case "EditLeave":
+						tab="EditLeave";
 						int leaveId = Integer.parseInt(req.getParameter("leaveId"));
+						Leave leave = db.getLeave(leaveId);
+						req.setAttribute("leave", leave);
+						break;
+						
+					case "UpdateLeave":
+						tab = "ViewLeaves";
+						 leaveId = Integer.parseInt(req.getParameter("leaveId"));
+						 String fromDate = req.getParameter("from_date");
+						 String toDate = req.getParameter("to_date");
+						Leave leave1 = db.getLeave(leaveId);
+						leave1.setFrom_date(fromDate);
+						leave1.setTo_date(toDate);
+						
+						db.updateLeave(leave1);
+						break;
+						
+					case "DeleteLeave":
+						 leaveId = Integer.parseInt(req.getParameter("leaveId"));
 						db.deleteLeave(leaveId);
 						break;
 						

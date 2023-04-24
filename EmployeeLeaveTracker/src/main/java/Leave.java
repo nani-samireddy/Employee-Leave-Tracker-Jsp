@@ -11,23 +11,11 @@ public class Leave {
 	String mode;
 	String reason;
 	int leaveId;
-	public int getLeaveId() {
-		return leaveId;
-	}
-
-	public void setLeaveId(int leaveId) {
-		this.leaveId = leaveId;
-	}
-
 	boolean canBeDeleted;
+	boolean canBeEdited;
 
-	public boolean isCanBeDeleted() {
-		return canBeDeleted;
-	}
 
-	public void setCanBeDeleted(boolean canBeDeleted) {
-		this.canBeDeleted = canBeDeleted;
-	}
+
 
 	public Leave(int leaveId, String signum, String from_date, String to_date, String type, String name, String mode,
 			String reason) {
@@ -45,7 +33,6 @@ public class Leave {
 		int hours = date.getHours();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-		System.out.print(to_date);
 		try {
 			String todayStr = formatter.format(date);
 			Date today = formatter.parse(todayStr);
@@ -64,6 +51,13 @@ public class Leave {
 			} else {
 				this.canBeDeleted = true;
 			}
+			
+			if (today.compareTo(toDate) < 0) {
+				this.canBeEdited = true;
+			} else {
+				this.canBeEdited = false;
+			}
+			
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -71,6 +65,23 @@ public class Leave {
 		}
 
 	}
+	
+
+	public boolean isCanBeDeleted() {
+		return canBeDeleted;
+	}
+
+	public void setCanBeDeleted(boolean canBeDeleted) {
+		this.canBeDeleted = canBeDeleted;
+	}
+	public int getLeaveId() {
+		return leaveId;
+	}
+
+	public void setLeaveId(int leaveId) {
+		this.leaveId = leaveId;
+	}
+	
 
 	public String getReason() {
 		return reason;
@@ -128,4 +139,13 @@ public class Leave {
 		this.name = name;
 	}
 
+	
+	public boolean isCanBeEdited() {
+		return canBeEdited;
+	}
+
+
+	public void setCanBeEdited(boolean canBeEdited) {
+		this.canBeEdited = canBeEdited;
+	}
 }

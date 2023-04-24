@@ -346,13 +346,23 @@
 															<td>${leave.type}</td>
 															<td>
 
-																<button>Edit</button>
+																<c:if test="${leave.canBeEdited==false}">
+																	<button disabled>Edit</button>
+																</c:if>
+																<c:if test="${leave.canBeEdited==true}">
+																	<form  method="post" action="Dashboard" onsubmit="return confirm('confirm to edit leave')">
+																	<input type="hidden" name="requestMode" value="EditLeave" id="vl">
+																	<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
+
+																	<button type="submit">Edit</button>
+																	</form>
+																</c:if>
 
 																<c:if test="${leave.canBeDeleted==false}">
 																	<button disabled>Delete</button>
 																</c:if>
 																<c:if test="${leave.canBeDeleted==true}">
-																	<form  method="post" action="Dashboard" onsubmit="return confirmDelete()">
+																	<form  method="post" action="Dashboard" onsubmit="return confirm('confirm to delete leave')">
 																	<input type="hidden" name="requestMode" value="DeleteLeave" id="vl">
 																	<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
 
@@ -404,7 +414,16 @@
 													From Date:
 												</td>
 												<td>
-													<input type="date" name="from_date" id="from_date" required />
+													
+													
+													
+													<c:if test="${leave.canBeDeleted==false}">
+													<input type="date" name="from_date" id="from_date" required disabled/>
+																</c:if>
+																<c:if test="${leave.canBeDeleted==true}">
+																		<input type="date" name="from_date" id="from_date" required disabled/>
+
+																</c:if>
 													<br><br>
 												</td>
 											</tr>
@@ -465,6 +484,81 @@
 									</form>
 								</section>
 							</c:when>
+							
+							<c:when test="${tabName=='EditLeave'}">
+								<!-- 
+											Edit leave
+											 -->
+
+								<section class="main tabContent" id="AddLeave" style="text-align:center; width:50%;">
+
+									<form method="post" action="Dashboard" onsubmit="return validate();">
+										<h1>Edit leave of ${leave.name}</h1>
+										<table>
+											
+											<tr>
+												<td>
+													From Date:
+												</td>
+												<td>
+													<input type="date" name="from_date" id="from_date" value="${leave.from_date}" required onchange="setMinDate(event);" />
+													<br><br>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													To Date:
+												</td>
+												<td>
+													<input type="date" name="to_date" id="to_date" value="${leave.to_date}" required  /> 
+													<br><br>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													Leave Type:
+												</td>
+												<td>
+													<select name="type" id="leaveMode" required disabled>
+														<option value="${leave.type}" selected >${leave.type}</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													CL/PL/EL:
+												</td>
+												<td>
+													<select name="mode" id="leaveType" required disabled><br> <br>
+														<option value="${leave.mode}" selected >${leave.mode}</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													Reason:
+												</td>
+												<td>
+													<textarea disabled name="reason" placeholder="reason"  required>${leave.reason}</textarea>
+												</td>
+											</tr>
+											<tr>
+												<td>
+												
+												<input type="hidden" name="requestMode" value="UpdateLeave" id="vl">
+												<input type="hidden" name="leaveId" value="${leave.leaveId}" id="vl">
+
+													<input type="submit" value="Updated Leave" />
+												</td>
+
+
+											</tr>
+										</table>
+									</form>
+								</section>
+							</c:when>
+							
+							
 
 							<c:when test="${tabName=='Manager'}">
 
@@ -577,8 +671,24 @@
 						$('#to_date').attr('min', today);
 						$('#from_date').attr('min', today);
 					}
+					
+					$("from_date").on("change",function (){
+						var fromDate = new Date($(this).val());
+						var dd = String(fromDate.getDate()).padStart(2, '0');
+						var mm = String(fromDate.getMonth() + 1).padStart(2, '0');
+						var yyyy = fromDate.getFullYear();
+						var min = yyyy + '-' + mm + '-' + dd;
+						$('#to_date').attr('min', min);
 
+					});
 
+					
+					function setMinDate(e){
+						$("#to_date").attr("min",e.target.value);
+						$("#to_date").attr("value","");
+						
+					}
+					
 
 				</script>
 			</body>

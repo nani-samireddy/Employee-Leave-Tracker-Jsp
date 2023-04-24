@@ -155,6 +155,18 @@ public class DatabaseService {
 		return false;
 
 	}
+	public Leave getLeave(int leaveId) throws SQLException, ClassNotFoundException {
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+		
+		String query = "select * from emp_leaves el inner join employee e on e.signumid = el.signum and el.leaveid in (?)";
+		PreparedStatement ps= con.prepareStatement(query);
+		ps.setInt(1, leaveId);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		return new Leave(rs.getInt("leaveid"),rs.getString("signum"),rs.getString("from_date"),rs.getString("to_date"),rs.getString("type"),rs.getString("name"),rs.getString("mode"),rs.getString("reason"));
+		
+	}
 	
 	public void deleteLeave(int leaveId) throws ClassNotFoundException, SQLException {
 		load();
@@ -164,6 +176,17 @@ public class DatabaseService {
 		ps.setInt(1, leaveId);
 		 ps.executeUpdate();
 		
+	}
+	
+	public void updateLeave(Leave leave) throws ClassNotFoundException, SQLException {
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+		String query = "update emp_leaves set from_date=(?), to_date=(?) where leaveid in (?)";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setDate(1,  Date.valueOf(leave.from_date));
+		ps.setDate(2,  Date.valueOf(leave.to_date));
+		ps.setInt(3, leave.leaveId);
+		 ps.executeUpdate();
 	}
 
 }
