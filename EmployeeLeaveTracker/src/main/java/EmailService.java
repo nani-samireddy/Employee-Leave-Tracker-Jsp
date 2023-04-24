@@ -47,10 +47,16 @@ public class EmailService {
         
     }
 
-    public static void sendLeaveEmail(Leave leave) {
+    public static void sendLeaveEmail(Leave leave,boolean update) {
     	String to = "kusupudiadithi@gmail.com";
         String from = "adikusupudi@gmail.com";
-        String subject = "Leave of "+leave.name+"("+leave.signum+")";
+        String subject;
+        if(update) {
+            subject = "Leave update of "+leave.name+"("+leave.signum+")";
+
+        }else {
+         subject = "Leave of "+leave.name+"("+leave.signum+")";
+        }
         String text = "Name: "+leave.name+"\nSignum: "+leave.signum+"\nFrom Date: "+leave.from_date+"\nTo Date: "+leave.to_date+"\nReason: "+leave.reason;
         boolean b = sendEmail(to, from, subject, text);
         if (b) {

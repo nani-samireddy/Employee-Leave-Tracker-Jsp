@@ -131,7 +131,7 @@ public class DatabaseService {
 		ps.setString(4, leave.mode);
 		ps.setString(5, leave.reason);
 		ps.executeUpdate();
-		EmailService.sendLeaveEmail(leave);
+		EmailService.sendLeaveEmail(leave,false);
 
 		return getEmployeeLeaves(leave.signum, false);
 
@@ -187,6 +187,8 @@ public class DatabaseService {
 		ps.setDate(2,  Date.valueOf(leave.to_date));
 		ps.setInt(3, leave.leaveId);
 		 ps.executeUpdate();
+			EmailService.sendLeaveEmail(leave,true);
+
 	}
 
 }
