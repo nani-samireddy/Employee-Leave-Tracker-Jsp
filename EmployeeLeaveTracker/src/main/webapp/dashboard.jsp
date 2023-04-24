@@ -338,6 +338,7 @@
 														<td> <b>To Date</b> </td>
 														<td><b>Half/Full</b></td>
 														<td><b>Actions</b></td>
+														<td><b>Number Of Days</b></td>
 													</tr>
 													<c:forEach items="${empLeaves}" var="leave">
 														<tr>
@@ -371,6 +372,7 @@
 																</c:if>
 
 															</td>
+															<td>${leave.numberOfDays}</td>
 														</tr>
 													</c:forEach>
 
@@ -417,13 +419,8 @@
 													
 													
 													
-													<c:if test="${leave.canBeDeleted==false}">
-													<input type="date" name="from_date" id="from_date" required disabled/>
-																</c:if>
-																<c:if test="${leave.canBeDeleted==true}">
-																		<input type="date" name="from_date" id="from_date" required disabled/>
-
-																</c:if>
+													<input type="date" name="from_date" id="from_date" required />
+															
 													<br><br>
 												</td>
 											</tr>

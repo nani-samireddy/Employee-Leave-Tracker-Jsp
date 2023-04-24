@@ -10,6 +10,7 @@ public class Leave {
 	String name;
 	String mode;
 	String reason;
+	int numberOfDays;
 	int leaveId;
 	boolean canBeDeleted;
 	boolean canBeEdited;
@@ -18,7 +19,7 @@ public class Leave {
 
 
 	public Leave(int leaveId, String signum, String from_date, String to_date, String type, String name, String mode,
-			String reason) {
+			String reason,int numberOfDays) {
 		super();
 		this.leaveId = leaveId;
 		this.from_date = from_date;
@@ -28,6 +29,7 @@ public class Leave {
 		this.name = name;
 		this.mode = mode;
 		this.reason = reason;
+		this.numberOfDays = numberOfDays;
 		Date date = new Date();
 
 		int hours = date.getHours();
@@ -66,6 +68,16 @@ public class Leave {
 
 	}
 	
+
+	public int getNumberOfDays() {
+		return numberOfDays;
+	}
+
+
+	public void setNumberOfDays(int numberOfDays) {
+		this.numberOfDays = numberOfDays;
+	}
+
 
 	public boolean isCanBeDeleted() {
 		return canBeDeleted;

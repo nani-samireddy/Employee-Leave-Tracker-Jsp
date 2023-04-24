@@ -63,7 +63,7 @@ public class Dashboard extends HttpServlet {
 						String type = req.getParameter("type");
 						String mode = req.getParameter("mode");
 						String reason = req.getParameter("reason");
-						db.addLeave(new Leave(00,signum1, from_date,to_date, type, e1.name, mode, reason));
+						db.addLeave(new Leave(00,signum1, from_date,to_date, type, e1.name, mode, reason,0));
 						tab = "AddLeave";
 						break;
 						
