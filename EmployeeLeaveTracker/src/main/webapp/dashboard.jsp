@@ -16,61 +16,44 @@
 
 				<style>
 					@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-
-
-
 					body {
 						margin: 0px;
 						padding: 0px;
 						background-color: white;
-						overflow: hidden;
+						overflow-x: hidden;
 						color: black;
-
 					}
-
 					.main {
 						display: flex;
 						flex-direction: column;
 						justify-content: center;
 						align-items: center;
 					}
-
 					input[type=submit] {
 						padding: 10px 20px;
 						margin: 10px 0px;
 						background-color: #A9A9A9;
 						border-radius: 10px;
-
 						border: none;
-
 					}
-
 					.wrap {
 						display: flex;
-
 						justify-content: space-between;
 						align-items: center;
 						height: 100vh;
 						width: 100vw;
 					}
-
 					#sideContent {
 						display: flex;
 						justify-content: center;
 						align-items: center;
 						color: black;
-
 						height: 100%;
 						width: 100%;
-
 					}
-
 					table {
 						border-spacing: 15px;
-
 					}
-
 					.sidenav {
 						height: 100%;
 						width: 270px;
@@ -78,7 +61,6 @@
 						transition: 0.5s;
 						padding: 30px 15px 0px 0px;
 					}
-
 					.sidenav span {
 						padding: 15px 8px 15px 32px;
 						text-decoration: none;
@@ -87,31 +69,24 @@
 						display: block;
 						transition: 0.3s;
 					}
-
 					.sidenav span:hover {
 						color: #f1f1f1;
 						background-color: #21618c;
 					}
-
-
 					.dashboard {
 						margin: 0px;
 						margin-left: 28px;
-
 						font-size: 40px;
 						color: #F4F6F7;
 						margin-bottom: 30px;
 					}
-
 					.menu li {
 						margin: 0px;
 						margin-left: -10px;
-
 						font-size: 20px;
 						color: #99A3A4;
 						margin-bottom: 30px;
 					}
-
 					.sub-menu li {
 						margin: 0px;
 						margin-left: -50px;
@@ -119,9 +94,6 @@
 						font-size: 20px;
 						color: #5DADE2;
 					}
-
-
-
 					.horizontal-line {
 						display: block;
 						margin-top: 30px;
@@ -130,12 +102,10 @@
 						border-style: inset;
 						border-width: 1px;
 					}
-
 					* {
 						list-style: none;
 						font-family: 'Poppins', sans-serif;
 					}
-
 					.inputContainer {
 						display: flex;
 						flex-direction: row;
@@ -145,7 +115,6 @@
 						margin-top: 30px;
 						font-size: 20px;
 					}
-
 					.table-container {
 						margin-top: 20px;
 						display: flex;
@@ -154,14 +123,9 @@
 						justify-content: space-evenly;
 						align-items: center;
 					}
-
 					.leaves-container {
 						padding-top: 30px;
 					}
-
-
-
-
 					.container {
 						position: relative;
 						margin-top: 100px;
@@ -171,7 +135,6 @@
 						border-radius: 5px;
 						margin-left: 100px;
 					}
-
 					.label1 {
 						padding: 20px 130px;
 						font-size: 35px;
@@ -179,17 +142,14 @@
 						color: #130f40;
 						text-align: center;
 					}
-
 					.login_form {
 						padding: 20px 40px;
 					}
-
 					.login_form .font {
 						font-size: 18px;
 						color: #130f40;
 						margin: 5px 0;
 					}
-
 					.login_form input {
 						height: 40px;
 						width: 350px;
@@ -197,11 +157,9 @@
 						outline: none;
 						border: 1px solid silver;
 					}
-
 					.login_form .font2 {
 						margin-top: 30px;
 					}
-
 					.login_form button {
 						margin: 45px 0 30px 0;
 						height: 45px;
@@ -216,11 +174,9 @@
 						border: 1px solid #3949AB;
 						transition: .5s;
 					}
-
 					.login_form button:hover {
 						background: #1A5276;
 					}
-
 					.login_form #email_error,
 					.login_form #pass_error {
 						margin-top: 5px;
@@ -234,7 +190,6 @@
 						border: 1px solid #EF9A9A;
 						display: none;
 					}
-
 				</style>
 				<script type="text/javascript">
 					function validate() {
@@ -244,14 +199,11 @@
 							alert("Please enter valid dates");
 							return false;
 						}
-
 						return true;
 					}
-
 					function confirmDelete() {
 						return confirm("Confirm to delete leave");
 					}
-
 				</script>
 			</head>
 
@@ -664,9 +616,6 @@
 
 
 				<script language="javascript">
-
-
-
 					if (new Date().getHours() <= 11) {
 						var today = new Date();
 						var dd = String(today.getDate()).padStart(2, '0');
@@ -685,16 +634,24 @@
 						$('#to_date').attr('min', today);
 						$('#from_date').attr('min', today);
 					}
-
-
-
-
 					function setMinDate(e) {
 						$("#to_date").attr("min", e.target.value);
 						$("#to_date").attr("value", "");
-
+						setMaxDate(e);
 					}
-
+					
+					function setMaxDate(e) {
+						console.log("inside setMaxDate");
+						var date = new Date(e.target.value);
+						var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+						var dd = String(lastDay.getDate()).padStart(2, '0');
+						var mm = String(lastDay.getMonth() + 1).padStart(2, '0');
+						var yyyy = lastDay.getFullYear();
+						lastDay = yyyy + '-' + mm + '-' + dd;
+						$("#to_date").attr("max", lastDay);
+						$("#to_date").attr("value", "");
+					}
+					
 					function setLeaveType(e) {
 						var fromDate = $("#from_date").val();
 						var toDate = $("#to_date").val();
@@ -703,10 +660,7 @@
 						} else {
 							$("select option:contains(HALF)").prop("disabled", false);
 						}
-
-
 					}
-
 					$(document).ready(function () {
 						$("#to_date").change(function () {
 							var fromDate = $("#from_date").val();
@@ -715,15 +669,10 @@
 							if (fromDate === toDate) {
 								$("select option:contains(HALF)").attr("disabled", false);
 							} else {
-
 								$("select option:contains(HALF)").attr("disabled", true);
 							}
-
 						})
 					});
-
-
-
 				</script>
 			</body>
 

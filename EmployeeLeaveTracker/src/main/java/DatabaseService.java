@@ -1,4 +1,3 @@
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -10,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 public class DatabaseService {
 
-	String url = "jdbc:mysql://localhost:3306/leaves";
+	String url = "jdbc:mysql://localhost:3307/leaves";
 	String user = "root";
-	String pass = "Root@123";
+	String pass = "Chitti2001";
 
 	public void load() throws ClassNotFoundException, SQLException {
 		String driver = "com.mysql.cj.jdbc.Driver";
@@ -35,8 +34,9 @@ public class DatabaseService {
 		Employee[] employees = new Employee[numberOfRows];
 
 		// getting full employees details
-		query = "select * from employee";
+		query = "select * from employee order by name ASC";
 		rs = stmt.executeQuery(query);
+		
 
 		// mapping employee table to employee class
 		int index = 0;
@@ -202,7 +202,7 @@ public class DatabaseService {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
 		int days = (int) getDifferenceDays(from, to);
-		String query = "select count(*) from holiday_calender where date>=(?) and date<=(?)";
+		String query = "select count(*) from holiday_calendar where date>=(?) and date<=(?)";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setDate(1, from);
 		ps.setDate(2, to);
