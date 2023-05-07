@@ -302,29 +302,40 @@ public class DatabaseService {
 		ps.setDate(2, to);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return days - rs.getInt(1)  - countWeekEnds(from,to);
+		int c = countWorkingDays(from,to);
+		System.out.println(c);
+		return c - rs.getInt(1)+1 ;
 	}
 	
-	public int countWeekEnds(Date startDate,Date endDate) {
+	public int countWorkingDays(Date startDate,Date endDate) {
 		// create a Calendar object and set its time to the start date
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        
-        // initialize counters for Saturdays and Sundays
-        int saturdayCount = 0;
-        int sundayCount = 0;
-        
-        // loop through each day in the time period
-        while (calendar.getTime().before(endDate)) {
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            if (dayOfWeek == Calendar.SATURDAY) {
-                saturdayCount++;
-            } else if (dayOfWeek == Calendar.SUNDAY) {
-                sundayCount++;
-            }
-            calendar.add(Calendar.DATE, 1);
-        }
-        return saturdayCount+sundayCount;
+		Calendar startCal = Calendar.getInstance();
+	    startCal.setTime(startDate);        
+
+	    Calendar endCal = Calendar.getInstance();
+	    endCal.setTime(endDate);
+
+	    int workDays = 0;
+
+	    //Return 0 if start and end are the same
+	    if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
+	        return 0;
+	    }
+
+	    if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
+	        startCal.setTime(endDate);
+	        endCal.setTime(startDate);
+	    }
+
+	    do {
+	       //excluding start date
+	        startCal.add(Calendar.DAY_OF_MONTH, 1);
+	        if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+	            ++workDays;
+	        }
+	    } while (startCal.getTimeInMillis() < endCal.getTimeInMillis()); //excluding end date
+
+        return workDays;
 	}
 	
 	public boolean isOverlapping(Leave leave) throws SQLException, ClassNotFoundException {
