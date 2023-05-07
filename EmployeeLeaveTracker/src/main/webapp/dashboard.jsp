@@ -208,6 +208,11 @@
 			</head>
 
 			<body>
+				
+				<c:if test="${alertContent!=null}">
+					<input id="alertbox" value="${alertContent}" type="hidden"/>
+				</c:if>
+			
 				<div class="wrap">
 					<div id="mySidenav" class="sidenav">
 						<p class="dashboard">Dashboard</p>
@@ -617,6 +622,8 @@
 
 
 				<script language="javascript">
+					
+				
 					if (new Date().getHours() <= 11) {
 						var today = new Date();
 						var dd = String(today.getDate()).padStart(2, '0');
@@ -663,6 +670,11 @@
 						}
 					}
 					$(document).ready(function () {
+						if ($("#alertbox").length) {
+							var inputValue = $("#alertbox").val();
+						    alert(inputValue);
+
+							}
 						$("#to_date").change(function () {
 							var fromDate = $("#from_date").val();
 							var toDate = $(this).val();

@@ -177,23 +177,34 @@ public class DatabaseService {
 		return new Employee(rs.getString("name"), rs.getString("signumid"));
 	}
 
-	public Leave[] addLeave(Leave leave) throws ClassNotFoundException, SQLException {
+	public DBResponse addLeave(Leave leave) throws ClassNotFoundException, SQLException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
+		
+		Date fromDate = Date.valueOf(leave.from_date);
+		Date toDate = Date.valueOf(leave.to_date);
+		if(this.isOverlapping(leave)) {
+			return new DBResponse("Leave dates are overlapping with existing leaves","dates-overlap");
+		}
 
 		// Creating statement
 		String query = "insert into emp_leaves (signum,from_date,type,mode,reason,to_date,number_of_days) values(?,?,?,?,?,?,?)";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, leave.signum);
-		ps.setDate(2, Date.valueOf(leave.from_date));
+		ps.setDate(2, fromDate);
 		ps.setString(3, leave.type);
 		ps.setString(4, leave.mode);
 		ps.setString(5, leave.reason);
-		ps.setDate(6, Date.valueOf(leave.to_date));
-		ps.setInt(7, calculateActualLeaveDays(Date.valueOf(leave.from_date), Date.valueOf(leave.to_date)));
+		ps.setDate(6, toDate);
+		if(leave.type.toUpperCase().equals("HALF")) {
+			System.out.print("YEAAAA");
+			ps.setDouble(7, 0.5);
+		}else {
+		 ps.setDouble(7, calculateActualLeaveDays(fromDate, toDate));
+		}
 		ps.executeUpdate();
 		EmailService.sendLeaveEmail(leave, false);
-		return getEmployeeLeaves(leave.signum, false);
+		return new DBResponse("Leave added successfully","leave-added");
 
 	}
 
@@ -212,7 +223,6 @@ public class DatabaseService {
 			return true;
 		}
 		return false;
-
 	}
 
 	public Leave getLeave(int leaveId) throws SQLException, ClassNotFoundException {
@@ -306,6 +316,25 @@ public class DatabaseService {
             calendar.add(Calendar.DATE, 1);
         }
         return saturdayCount+sundayCount;
+	}
+	
+	public boolean isOverlapping(Leave leave) throws SQLException, ClassNotFoundException {
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+		String query = "SELECT COUNT(*) FROM emp_leaves WHERE signum = ? AND from_date <= ? AND to_date >= ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, leave.signum);
+		ps.setDate(2, Date.valueOf(leave.from_date));
+		ps.setDate(3,  Date.valueOf(leave.to_date));
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+		if (count > 0) {
+		    return true;
+		} else {
+		    return false;
+		}
+
 	}
 	
 	
