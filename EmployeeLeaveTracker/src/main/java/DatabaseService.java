@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -175,6 +177,8 @@ public class DatabaseService {
 		rs.next();
 		return new Employee(rs.getString("name"), rs.getString("signumid"));
 	}
+	
+	
 
 	public DBResponse addLeave(Leave leave) throws ClassNotFoundException, SQLException {
 		load();
@@ -196,10 +200,14 @@ public class DatabaseService {
 		ps.setString(4, leave.mode);
 		ps.setString(5, leave.reason);
 		ps.setDate(6, toDate);
-		if("HALF".equals(leave.type) && this.countWorkingDays(fromDate, toDate)==1 && this.getHolidays(fromDate, toDate)==0) {
-			System.out.print("YEAAAA");
-			
-			ps.setDouble(7, 0.5);
+		
+		
+		if(isSameDay(fromDate,toDate) && getWorkingDays(fromDate, toDate)==1 && this.getHolidays(fromDate, toDate)==0) {
+			if("HALF".equals(leave.type)) {
+				ps.setDouble(7, 0.5);
+			}else {
+				ps.setDouble(7, 1);
+			}
 		}else {
 			int numberOfDays = calculateActualLeaveDays(fromDate, toDate);
 			if(numberOfDays==0) {
@@ -291,7 +299,7 @@ public class DatabaseService {
 
 	public  int calculateActualLeaveDays(Date from, Date to) throws ClassNotFoundException, SQLException {
 		
-		int c = countWorkingDays(from,to);
+		int c = getWorkingDays(from,to);
 		System.out.println(c);
 		int holidays= this.getHolidays(from, to);
 		return c - holidays ;
@@ -309,45 +317,89 @@ public class DatabaseService {
 		return rs.getInt(1);
 	}
 	
-	public int countWorkingDays(Date startDate,Date endDate) {
-		// create a Calendar object and set its time to the start date
-		Calendar startCal = Calendar.getInstance();
-	    startCal.setTime(startDate);        
-
-	    Calendar endCal = Calendar.getInstance();
-	    endCal.setTime(endDate);
+	public static int getWorkingDays(Date startDate, Date endDate) {
+	    LocalDate startLocalDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(startDate) );
+	    LocalDate endLocalDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(endDate) );
 
 	    int workDays = 0;
 
-	    //Return 0 if start and end are the same
-	    if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-	        return 0;
+	    // Return 0 if start and end are the same
+	    if (startLocalDate.equals(endLocalDate)) {
+	        return 1;
 	    }
 
-	    if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
-	        startCal.setTime(endDate);
-	        endCal.setTime(startDate);
+	    if (startLocalDate.isAfter(endLocalDate)) {
+	        LocalDate temp = startLocalDate;
+	        startLocalDate = endLocalDate;
+	        endLocalDate = temp;
 	    }
 
-	    do {
-	       //excluding start date
-	        startCal.add(Calendar.DAY_OF_MONTH, 1);
-	        if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+	    LocalDate date = startLocalDate;
+	    while (date.isBefore(endLocalDate) || date.isEqual(endLocalDate)) {
+	        if (!date.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+	            workDays++;
+	        }
+	        date = date.plusDays(1);
+	    }
+	    return workDays;
+	}
+
+	
+	public int countWorkingDays(Date startDate,Date endDate) {
+		// create a Calendar object and set its time to the start date
+		Calendar startCal = Calendar.getInstance();
+		startCal.setTime(startDate);
+
+		Calendar endCal = Calendar.getInstance();
+		endCal.setTime(endDate);
+
+		int workDays = 0;
+
+		// Return 1 if start and end are the same
+		if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
+		    return 1;
+		}
+
+		
+		  // Count the number of workdays
+	    while (startCal.getTimeInMillis() <= endCal.getTimeInMillis()) {
+	        if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY 
+	                && startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
 	            ++workDays;
 	        }
-	    } while (startCal.getTimeInMillis() < endCal.getTimeInMillis()); //excluding end date
+	        startCal.add(Calendar.DAY_OF_MONTH, 1);
+	    }
 
-        return workDays;
+		// Include the end date if it's a work day
+		if (endCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && endCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+		    ++workDays;
+		}
+
+		return workDays;
+
+	}
+	public static boolean isSameDay(Date date1, Date date2) {
+	    SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+	    return fmt.format(date1).equals(fmt.format(date2));
 	}
 	
 	public boolean isOverlapping(Leave leave) throws SQLException, ClassNotFoundException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
-		String query = "SELECT COUNT(*) FROM emp_leaves WHERE signum = ? AND from_date <= ? AND to_date >= ?";
+		String query = "SELECT COUNT(*) FROM emp_leaves WHERE signum = ? AND from_date <= ? AND to_date >= ? OR from_date <= ? AND to_date >= ? OR from_date <= ? AND to_date >= ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, leave.signum);
 		ps.setDate(2, Date.valueOf(leave.from_date));
 		ps.setDate(3,  Date.valueOf(leave.to_date));
+		
+		ps.setDate(4, Date.valueOf(leave.from_date));
+		ps.setDate(5,  Date.valueOf(leave.from_date));
+		
+
+		ps.setDate(6, Date.valueOf(leave.to_date));
+		ps.setDate(7,  Date.valueOf(leave.to_date));
+		
+		
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		int count = rs.getInt(1);
