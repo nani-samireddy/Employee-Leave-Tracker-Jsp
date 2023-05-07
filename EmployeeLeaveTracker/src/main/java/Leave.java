@@ -10,13 +10,13 @@ public class Leave {
 	String name;
 	String mode;
 	String reason;
-	int numberOfDays;
+	double numberOfDays;
 	int leaveId;
 	boolean canBeDeleted;
 	boolean canBeEdited;
 
 	public Leave(int leaveId, String signum, String from_date, String to_date, String type, String name, String mode,
-			String reason, int numberOfDays) {
+			String reason, double numberOfDays) {
 		super();
 		this.leaveId = leaveId;
 		this.from_date = from_date;
@@ -64,11 +64,11 @@ public class Leave {
 
 	}
 
-	public int getNumberOfDays() {
+	public double getNumberOfDays() {
 		return numberOfDays;
 	}
 
-	public void setNumberOfDays(int numberOfDays) {
+	public void setNumberOfDays(double numberOfDays) {
 		this.numberOfDays = numberOfDays;
 	}
 

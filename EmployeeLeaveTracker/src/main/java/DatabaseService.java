@@ -97,7 +97,7 @@ public class DatabaseService {
 		while (rs.next()) {
 			empLeaves[index] = new Leave(rs.getInt("leaveid"), rs.getString("signum"),
 					rs.getDate("from_date").toString(), rs.getDate("to_date").toString(), rs.getString("type"), name,
-					rs.getString("mode"), rs.getString("reason"), rs.getInt("number_of_days"));
+					rs.getString("mode"), rs.getString("reason"), rs.getDouble("number_of_days"));
 			index++;
 		}
 		con.close();
@@ -302,7 +302,7 @@ public class DatabaseService {
 		ps.setDate(2, to);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return days - rs.getInt(1) + 1 - countWeekEnds(from,to);
+		return days - rs.getInt(1)  - countWeekEnds(from,to);
 	}
 	
 	public int countWeekEnds(Date startDate,Date endDate) {
