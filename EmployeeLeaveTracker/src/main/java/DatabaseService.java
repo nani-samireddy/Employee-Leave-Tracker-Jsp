@@ -325,7 +325,12 @@ public class DatabaseService {
 
 	    // Return 0 if start and end are the same
 	    if (startLocalDate.equals(endLocalDate)) {
-	        return 1;
+	    	if(!startLocalDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !startLocalDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+	    		return 1;
+	    	}else {
+	    		return 0;
+	    	}
+	        
 	    }
 
 	    if (startLocalDate.isAfter(endLocalDate)) {
@@ -386,7 +391,7 @@ public class DatabaseService {
 	public boolean isOverlapping(Leave leave) throws SQLException, ClassNotFoundException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
-		String query = "SELECT COUNT(*) FROM emp_leaves WHERE signum = ? AND from_date <= ? AND to_date >= ? OR from_date <= ? AND to_date >= ? OR from_date <= ? AND to_date >= ?";
+		String query = "SELECT COUNT(*) FROM emp_leaves WHERE signum = ? AND ((from_date <= ? AND to_date >= ?) OR (from_date <= ? AND to_date >= ?) OR (from_date <= ? AND to_date >= ?))";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, leave.signum);
 		ps.setDate(2, Date.valueOf(leave.from_date));
