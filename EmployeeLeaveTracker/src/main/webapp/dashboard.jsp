@@ -555,7 +555,7 @@
 											style="text-align:center; width:100%;">
 											<form method="post" action="Dashboard">
 												<div class="inputContainer">
-													Select Employee: <select name="selectedEmp" id="selectedEmp">
+													 <select name="selectedEmp" id="selectedEmp">
 														<option value="" disabled selected>
 															select employee
 														</option>
@@ -563,6 +563,7 @@
 															<option value="${emp.name}">${emp.signum}</option>
 														</c:forEach>
 													</select>
+													<input name="monthAndYear" type="month" required />
 													<div class="buttonsContainer">
 														<input type="hidden" name="requestMode" value="ViewAllLeaves"
 															id="vl">

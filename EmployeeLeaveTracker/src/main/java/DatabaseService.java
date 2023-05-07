@@ -5,13 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class DatabaseService {
 
-	String url = "jdbc:mysql://localhost:3307/leaves";
+	String url = "jdbc:mysql://localhost:3306/leaves";
 	String user = "root";
-	String pass = "Chitti2001";
+	String pass = "Root@123";
 
 	public void load() throws ClassNotFoundException, SQLException {
 		String driver = "com.mysql.cj.jdbc.Driver";
@@ -102,6 +104,64 @@ public class DatabaseService {
 		return empLeaves;
 
 	}
+	
+
+	public Leave[] getLeavesInMonth(String signum, Date date) throws ClassNotFoundException, SQLException {
+		// Connection to Db
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+
+		int month = getMonthNumber(date);
+		int year = getYearNumber(date);
+		// getting the number of Rows
+		String query = "select count(*) from emp_leaves where signum in (?) and (MONTH(from_date)=(?) or MONTH(to_date)=(?)) and (YEAR(from_date)=(?) or YEAR(to_date)=(?))";
+
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, signum);
+		ps.setInt(2, month);
+		ps.setInt(3, month);
+		ps.setInt(4, year);
+		ps.setInt(5, year);
+		
+
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int numberOfRows = rs.getInt(1);
+
+		// getting the empName
+		query = String.format("select name from employee where signumid in (%s)", signum);
+		rs = ps.executeQuery();
+		rs.next();
+		String name = rs.getString(1);
+
+		// getting the emp leaves list
+		 query = "select * from emp_leaves where signum in (?) and (MONTH(from_date)=(?) or MONTH(to_date)=(?)) and (YEAR(from_date)=(?) or YEAR(to_date)=(?))";
+		
+
+		PreparedStatement ps1 = con.prepareStatement(query);
+		ps1.setString(1, signum);
+		ps1.setInt(2, month);
+		ps1.setInt(3, month);
+		ps1.setInt(4, year);
+		ps1.setInt(5, year);
+		
+		rs = ps1.executeQuery();
+
+		// creating the leaveslist
+		Leave[] empLeaves = new Leave[numberOfRows];
+		int index = 0;
+		while (rs.next()) {
+			empLeaves[index] = new Leave(rs.getInt("leaveid"), rs.getString("signum"),
+					rs.getDate("from_date").toString(), rs.getDate("to_date").toString(), rs.getString("type"), name,
+					rs.getString("mode"), rs.getString("reason"), rs.getInt("number_of_days"));
+			index++;
+		}
+		con.close();
+		return empLeaves;
+
+	}
+	
+	
 
 	public Employee getEmployeDetails(String signum) throws ClassNotFoundException, SQLException {
 		load();
@@ -197,8 +257,23 @@ public class DatabaseService {
 		long diff = d2.getTime() - d1.getTime();
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
+	
+	public static int getMonthNumber(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
 
-	public int calculateActualLeaveDays(Date from, Date to) throws ClassNotFoundException, SQLException {
+		// get the month number (0-11) from the Calendar object
+		return calendar.get(Calendar.MONTH) + 1;
+	}
+	
+	public static int getYearNumber(Date date) {
+		LocalDate localDate = date.toLocalDate();
+        // get the year number from the java.time.LocalDate object
+        return localDate.getYear();
+
+	}
+
+	public  int calculateActualLeaveDays(Date from, Date to) throws ClassNotFoundException, SQLException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
 		int days = (int) getDifferenceDays(from, to);
@@ -208,7 +283,31 @@ public class DatabaseService {
 		ps.setDate(2, to);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return days - rs.getInt(1) + 1;
+		return days - rs.getInt(1) + 1 - countWeekEnds(from,to);
 	}
+	
+	public int countWeekEnds(Date startDate,Date endDate) {
+		// create a Calendar object and set its time to the start date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        
+        // initialize counters for Saturdays and Sundays
+        int saturdayCount = 0;
+        int sundayCount = 0;
+        
+        // loop through each day in the time period
+        while (calendar.getTime().before(endDate)) {
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek == Calendar.SATURDAY) {
+                saturdayCount++;
+            } else if (dayOfWeek == Calendar.SUNDAY) {
+                sundayCount++;
+            }
+            calendar.add(Calendar.DATE, 1);
+        }
+        return saturdayCount+sundayCount;
+	}
+	
+	
 
 }

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -107,14 +108,16 @@ public class Dashboard extends HttpServlet {
 					case "ViewAllLeaves":
 						System.out.println("gettting all leaves");
 						String signum2 = req.getParameter("selectedEmp");
-						Employee e2;
-						Leave[] emp_allLeaves = db.getEmployeeLeaves(signum2, true);
-						e2 = db.getEmployeDetails(signum2);
+						String monthAndYear = req.getParameter("monthAndYear");
+						Date monthYear =  Date.valueOf(monthAndYear+"-01");
+						Leave[] emp_allLeaves = db.getLeavesInMonth(signum2, monthYear);
+						Employee e2 = db.getEmployeDetails(signum2);
 						req.setAttribute("msname", e2.getName());
 						req.setAttribute("mssignum", e2.getSignum());
 						req.setAttribute("empAllLeaves", emp_allLeaves);
 						req.setAttribute("managerStatus", "viewAllLeaves");
 						req.setAttribute("noLeaves", emp_allLeaves == null);
+						
 						tab = "Manager";
 						break;
 
