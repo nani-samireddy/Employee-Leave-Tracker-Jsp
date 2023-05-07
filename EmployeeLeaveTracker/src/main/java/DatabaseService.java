@@ -7,13 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 public class DatabaseService {
 
 	String url = "jdbc:mysql://localhost:3306/leaves";
 	String user = "root";
-	String pass = "Root@123";
+	String pass = "Chitti2001";
 
 	public void load() throws ClassNotFoundException, SQLException {
 		String driver = "com.mysql.cj.jdbc.Driver";
@@ -197,8 +196,9 @@ public class DatabaseService {
 		ps.setString(4, leave.mode);
 		ps.setString(5, leave.reason);
 		ps.setDate(6, toDate);
-		if(leave.type.toUpperCase().equals("HALF")) {
+		if("HALF".equals(leave.type) && this.countWorkingDays(fromDate, toDate)==1 && this.getHolidays(fromDate, toDate)==0) {
 			System.out.print("YEAAAA");
+			
 			ps.setDouble(7, 0.5);
 		}else {
 			int numberOfDays = calculateActualLeaveDays(fromDate, toDate);
@@ -272,10 +272,7 @@ public class DatabaseService {
 		
 	}
 
-	public static long getDifferenceDays(Date d1, Date d2) {
-		long diff = d2.getTime() - d1.getTime();
-		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-	}
+
 	
 	public static int getMonthNumber(Date date) {
 		Calendar calendar = Calendar.getInstance();
@@ -293,18 +290,23 @@ public class DatabaseService {
 	}
 
 	public  int calculateActualLeaveDays(Date from, Date to) throws ClassNotFoundException, SQLException {
+		
+		int c = countWorkingDays(from,to);
+		System.out.println(c);
+		int holidays= this.getHolidays(from, to);
+		return c - holidays ;
+	}
+	
+	public int  getHolidays(Date from, Date to) throws ClassNotFoundException, SQLException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
-		int days = (int) getDifferenceDays(from, to);
 		String query = "select count(*) from holiday_calendar where date>=(?) and date<=(?)";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setDate(1, from);
 		ps.setDate(2, to);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		int c = countWorkingDays(from,to);
-		System.out.println(c);
-		return c - rs.getInt(1)+1 ;
+		return rs.getInt(1);
 	}
 	
 	public int countWorkingDays(Date startDate,Date endDate) {
