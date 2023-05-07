@@ -63,8 +63,8 @@ public class Dashboard extends HttpServlet {
 						String type = req.getParameter("type");
 						String mode = req.getParameter("mode");
 						String reason = req.getParameter("reason");
-						DBResponse response = db.addLeave(new Leave(00, signum1, from_date, to_date, type, e1.name, mode, reason, 0));
-						req.setAttribute("alertContent", response.getMessage());
+						DBResponse addResponse = db.addLeave(new Leave(00, signum1, from_date, to_date, type, e1.name, mode, reason, 0));
+						req.setAttribute("alertContent", addResponse.getMessage());
 						tab = "AddLeave";
 						break;
 
@@ -84,12 +84,15 @@ public class Dashboard extends HttpServlet {
 						leave1.setFrom_date(fromDate);
 						leave1.setTo_date(toDate);
 
-						db.updateLeave(leave1);
+						DBResponse upRespose = db.updateLeave(leave1);
+						req.setAttribute("alertContent", upRespose.getMessage());
+
 						break;
 
 					case "DeleteLeave":
 						leaveId = Integer.parseInt(req.getParameter("leaveId"));
-						db.deleteLeave(leaveId);
+						DBResponse delResponse = db.deleteLeave(leaveId);
+						req.setAttribute("alertContent", delResponse.getMessage());
 						break;
 
 					case "Login":

@@ -621,9 +621,28 @@
 				</div>
 
 
-				<script language="javascript">
+				<script>
+				$(document).ready(function() {
+					  if ($("#alertbox").length) {
+					    var inputValue = $("#alertbox").val();
+					    alert(inputValue);
+					  }
+					});
 					
-				
+				$(document).ready(function () {
+					
+					
+					$("#to_date").change(function () {
+						var fromDate = $("#from_date").val();
+						var toDate = $(this).val();
+						console.log(fromDate === toDate);
+						if (fromDate === toDate) {
+							$("select option:contains(HALF)").attr("disabled", false);
+						} else {
+							$("select option:contains(HALF)").attr("disabled", true);
+						}
+					})
+				});
 					if (new Date().getHours() <= 11) {
 						var today = new Date();
 						var dd = String(today.getDate()).padStart(2, '0');
@@ -669,23 +688,8 @@
 							$("select option:contains(HALF)").prop("disabled", false);
 						}
 					}
-					$(document).ready(function () {
-						if ($("#alertbox").length) {
-							var inputValue = $("#alertbox").val();
-						    alert(inputValue);
-
-							}
-						$("#to_date").change(function () {
-							var fromDate = $("#from_date").val();
-							var toDate = $(this).val();
-							console.log(fromDate === toDate);
-							if (fromDate === toDate) {
-								$("select option:contains(HALF)").attr("disabled", false);
-							} else {
-								$("select option:contains(HALF)").attr("disabled", true);
-							}
-						})
-					});
+					
+					
 				</script>
 			</body>
 

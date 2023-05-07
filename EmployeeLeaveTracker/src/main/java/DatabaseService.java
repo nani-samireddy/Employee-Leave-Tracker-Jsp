@@ -186,6 +186,7 @@ public class DatabaseService {
 		if(this.isOverlapping(leave)) {
 			return new DBResponse("Leave dates are overlapping with existing leaves","dates-overlap");
 		}
+		
 
 		// Creating statement
 		String query = "insert into emp_leaves (signum,from_date,type,mode,reason,to_date,number_of_days) values(?,?,?,?,?,?,?)";
@@ -200,7 +201,11 @@ public class DatabaseService {
 			System.out.print("YEAAAA");
 			ps.setDouble(7, 0.5);
 		}else {
-		 ps.setDouble(7, calculateActualLeaveDays(fromDate, toDate));
+			int numberOfDays = calculateActualLeaveDays(fromDate, toDate);
+			if(numberOfDays==0) {
+				return new DBResponse("No working days in the selected leave","no-working-days");
+			}
+		 ps.setDouble(7, numberOfDays);
 		}
 		ps.executeUpdate();
 		EmailService.sendLeaveEmail(leave, false);
@@ -240,17 +245,19 @@ public class DatabaseService {
 
 	}
 
-	public void deleteLeave(int leaveId) throws ClassNotFoundException, SQLException {
+	public DBResponse deleteLeave(int leaveId) throws ClassNotFoundException, SQLException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
 		String query = "delete from emp_leaves where leaveid in (?)";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setInt(1, leaveId);
 		ps.executeUpdate();
+		return new DBResponse("Leave Deleted Successfully","leave-deleted");
+		
 
 	}
 
-	public void updateLeave(Leave leave) throws ClassNotFoundException, SQLException {
+	public DBResponse updateLeave(Leave leave) throws ClassNotFoundException, SQLException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
 		String query = "update emp_leaves set from_date=(?), to_date=(?), number_of_days=(?) where leaveid in (?)";
@@ -261,6 +268,8 @@ public class DatabaseService {
 		ps.setInt(4, leave.leaveId);
 		ps.executeUpdate();
 		EmailService.sendLeaveEmail(leave, true);
+		return new DBResponse("Leave updated Successfully","leaved-updated");
+		
 	}
 
 	public static long getDifferenceDays(Date d1, Date d2) {
