@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.StringJoiner;
 
 public class DatabaseService {
 
@@ -216,7 +217,12 @@ public class DatabaseService {
 		 ps.setDouble(7, numberOfDays);
 		}
 		ps.executeUpdate();
-		EmailService.sendLeaveEmail(leave, false);
+		
+		String emails = getEmails(leave.getSignum());
+		OutlookEmailSender.sendEmail(emails, "New leave added by " + leave.name + "(" + leave.signum + ")", "Name: " + leave.name + "\nSignum: " + leave.signum + "\nFrom Date: " + leave.from_date
+                + "\nTo Date: " + leave.to_date + "\nReason: " + leave.reason);
+		
+		//EmailService.sendLeaveEmail(leave, false);
 		return new DBResponse("Leave added successfully","leave-added");
 
 	}
@@ -256,10 +262,16 @@ public class DatabaseService {
 	public DBResponse deleteLeave(int leaveId) throws ClassNotFoundException, SQLException {
 		load();
 		Connection con = DriverManager.getConnection(url, user, pass);
+		Leave leave = getLeave(leaveId);
 		String query = "delete from emp_leaves where leaveid in (?)";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setInt(1, leaveId);
 		ps.executeUpdate();
+		
+		String emails = getEmails(leave.getSignum());
+		OutlookEmailSender.sendEmail(emails, "Leave Deleted by " + leave.name + "(" + leave.signum + ")", "Name: " + leave.name + "\nSignum: " + leave.signum + "\nFrom Date: " + leave.from_date
+                + "\nTo Date: " + leave.to_date + "\nReason: " + leave.reason);
+		
 		return new DBResponse("Leave Deleted Successfully","leave-deleted");
 		
 
@@ -275,7 +287,10 @@ public class DatabaseService {
 		ps.setInt(3, calculateActualLeaveDays(Date.valueOf(leave.from_date), Date.valueOf(leave.to_date)));
 		ps.setInt(4, leave.leaveId);
 		ps.executeUpdate();
-		EmailService.sendLeaveEmail(leave, true);
+		String emails = getEmails(leave.getSignum());
+		OutlookEmailSender.sendEmail(emails, "Leave update of " + leave.name + "(" + leave.signum + ")", "Name: " + leave.name + "\nSignum: " + leave.signum + "\nFrom Date: " + leave.from_date
+                + "\nTo Date: " + leave.to_date + "\nReason: " + leave.reason);
+		//EmailService.sendLeaveEmail(leave, true);
 		return new DBResponse("Leave updated Successfully","leaved-updated");
 		
 	}
@@ -416,6 +431,30 @@ public class DatabaseService {
 
 	}
 	
+	String getEmails(String signum) throws ClassNotFoundException, SQLException {
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+
+		String query = "SELECT email FROM employee WHERE role='MGR' OR signumid=(?)";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, signum);
+		
+		ResultSet res = ps.executeQuery();
+		
+		StringJoiner emailJoiner = new StringJoiner(", ");
+
+		while (res.next()) {
+		    String email = res.getString("email");
+		    emailJoiner.add(email);
+		}
+
+		String emails = emailJoiner.toString();
+		System.out.println(emails);
+		return emails;
+
+		
+		
+	}
 	
 
 }
