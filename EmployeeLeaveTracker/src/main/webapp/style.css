@@ -1,17 +1,214 @@
-td {
-  padding: 10px 32px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+					body {
+						margin: 0px;
+						padding: 0px;
+						background-color: white;
+						overflow-x: hidden;
+						color: black;
+					}
+					.main {
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						align-items: center;
+					}
+					input[type=submit] {
+						padding: 10px 20px;
+						margin: 10px 0px;
+						background-color: #A9A9A9;
+						border-radius: 10px;
+						border: none;
+					}
+					.wrap {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						height: 100vh;
+						width: 100vw;
+					}
+					#sideContent {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						color: black;
+						height: 100%;
+						width: 100%;
+					}
+					.sidenav {
+						height: 100%;
+						width: 270px;
+						background-color: #242424;
+						transition: 0.5s;
+						padding: 30px 15px 0px 0px;
+					}
+					.sidenav span {
+						padding: 15px 8px 15px 32px;
+						text-decoration: none;
+						font-size: 20px;
+						color: #5DADE2;
+						display: block;
+						transition: 0.3s;
+					}
+					.sidenav span:hover {
+						color: #f1f1f1;
+						background-color: #21618c;
+					}
+					.dashboard {
+						margin: 0px;
+						margin-left: 28px;
+						font-size: 40px;
+						color: #F4F6F7;
+						margin-bottom: 30px;
+					}
+					.menu li {
+						margin: 0px;
+						margin-left: -10px;
+						font-size: 20px;
+						color: #99A3A4;
+						margin-bottom: 30px;
+					}
+					.sub-menu li {
+						margin: 0px;
+						margin-left: -50px;
+						font-family: 'Aleo light';
+						font-size: 20px;
+						color: #5DADE2;
+					}
+					.horizontal-line {
+						display: block;
+						margin-top: 30px;
+						margin-left: auto;
+						margin-right: 20px;
+						border-style: inset;
+						border-width: 1px;
+					}
+					* {
+						list-style: none;
+						font-family: 'Poppins', sans-serif;
+					}
+					.inputContainer {
+						display: flex;
+						flex-direction: row;
+						gap: 20px;
+						justify-content: center;
+						align-items: center;
+						margin-top: 30px;
+						font-size: 20px;
+					}
+					.table-container {
+						margin-top: 20px;
+						display: flex;
+						flex-direction: row;
+						gap: 20px;
+						justify-content: space-evenly;
+						align-items: center;
+					}
+					.leaves-container {
+						padding-top: 30px;
+					}
+					.container {
+						position: relative;
+						margin-top: 100px;
+						width: 440px;
+						height: auto;
+						background: #dedede;
+						border-radius: 5px;
+						margin-left: 100px;
+					}
+					.label1 {
+						padding: 20px 130px;
+						font-size: 35px;
+						font-weight: bold;
+						color: #130f40;
+						text-align: center;
+					}
+					.login_form {
+						padding: 20px 40px;
+					}
+					.login_form .font {
+						font-size: 18px;
+						color: #130f40;
+						margin: 5px 0;
+					}
+					.login_form input {
+						height: 40px;
+						width: 350px;
+						padding: 0 5px;
+						outline: none;
+						border: 1px solid silver;
+					}
+					.login_form .font2 {
+						margin-top: 30px;
+					}
+					.login_form button {
+						margin: 45px 0 30px 0;
+						height: 45px;
+						width: 365px;
+						font-size: 20px;
+						color: white;
+						outline: none;
+						cursor: pointer;
+						font-weight: bold;
+						background: #2471A3;
+						border-radius: 3px;
+						border: 1px solid #3949AB;
+						transition: .5s;
+					}
+					.login_form button:hover {
+						background: #1A5276;
+					}
+					.login_form #email_error,
+					.login_form #pass_error {
+						margin-top: 5px;
+						width: 345px;
+						font-size: 18px;
+						color: #C62828;
+						background: rgba(255, 0, 0, 0.1);
+						text-align: center;
+						padding: 5px 8px;
+						border-radius: 3px;
+						border: 1px solid #EF9A9A;
+						display: none;
+					}
 
+td {
+  padding: 10px 20px;
   font-size: 0.8rem;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
+  text-align: left;
 }
+
 
 th {
   background-color: #b0b0b0;
   color: #000;
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: 500;
+  font-size: .8rem;
   text-align: center;
-  padding: 20px 60px;
+  padding: 10px 20px;
 }
 
+
+
+nav{
+  padding: 20px 20px;
+  width: 100%;
+  background-color:  #242424;
+  color: white;
+  display: flex;
+
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+select{
+    font-size: medium;
+    font-weight: 500;
+}
+
+input,select, textarea{
+    padding: 10px;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

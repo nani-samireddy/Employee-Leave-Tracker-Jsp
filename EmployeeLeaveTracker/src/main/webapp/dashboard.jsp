@@ -6,7 +6,7 @@
 
 			<head>
 				<title>Employee Dashboard</title>
-				<link rel="stylesheet" href="style.css">
+				<link rel="stylesheet" href="./style.css">
 				<link rel="stylesheet"
 					href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 				<link href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet"
@@ -14,183 +14,6 @@
 				<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
 				<script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-				<style>
-					@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-					body {
-						margin: 0px;
-						padding: 0px;
-						background-color: white;
-						overflow-x: hidden;
-						color: black;
-					}
-					.main {
-						display: flex;
-						flex-direction: column;
-						justify-content: center;
-						align-items: center;
-					}
-					input[type=submit] {
-						padding: 10px 20px;
-						margin: 10px 0px;
-						background-color: #A9A9A9;
-						border-radius: 10px;
-						border: none;
-					}
-					.wrap {
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-						height: 100vh;
-						width: 100vw;
-					}
-					#sideContent {
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						color: black;
-						height: 100%;
-						width: 100%;
-					}
-					table {
-						border-spacing: 15px;
-					}
-					.sidenav {
-						height: 100%;
-						width: 270px;
-						background-color: #242424;
-						transition: 0.5s;
-						padding: 30px 15px 0px 0px;
-					}
-					.sidenav span {
-						padding: 15px 8px 15px 32px;
-						text-decoration: none;
-						font-size: 20px;
-						color: #5DADE2;
-						display: block;
-						transition: 0.3s;
-					}
-					.sidenav span:hover {
-						color: #f1f1f1;
-						background-color: #21618c;
-					}
-					.dashboard {
-						margin: 0px;
-						margin-left: 28px;
-						font-size: 40px;
-						color: #F4F6F7;
-						margin-bottom: 30px;
-					}
-					.menu li {
-						margin: 0px;
-						margin-left: -10px;
-						font-size: 20px;
-						color: #99A3A4;
-						margin-bottom: 30px;
-					}
-					.sub-menu li {
-						margin: 0px;
-						margin-left: -50px;
-						font-family: 'Aleo light';
-						font-size: 20px;
-						color: #5DADE2;
-					}
-					.horizontal-line {
-						display: block;
-						margin-top: 30px;
-						margin-left: auto;
-						margin-right: 20px;
-						border-style: inset;
-						border-width: 1px;
-					}
-					* {
-						list-style: none;
-						font-family: 'Poppins', sans-serif;
-					}
-					.inputContainer {
-						display: flex;
-						flex-direction: row;
-						gap: 20px;
-						justify-content: center;
-						align-items: center;
-						margin-top: 30px;
-						font-size: 20px;
-					}
-					.table-container {
-						margin-top: 20px;
-						display: flex;
-						flex-direction: row;
-						gap: 20px;
-						justify-content: space-evenly;
-						align-items: center;
-					}
-					.leaves-container {
-						padding-top: 30px;
-					}
-					.container {
-						position: relative;
-						margin-top: 100px;
-						width: 440px;
-						height: auto;
-						background: #dedede;
-						border-radius: 5px;
-						margin-left: 100px;
-					}
-					.label1 {
-						padding: 20px 130px;
-						font-size: 35px;
-						font-weight: bold;
-						color: #130f40;
-						text-align: center;
-					}
-					.login_form {
-						padding: 20px 40px;
-					}
-					.login_form .font {
-						font-size: 18px;
-						color: #130f40;
-						margin: 5px 0;
-					}
-					.login_form input {
-						height: 40px;
-						width: 350px;
-						padding: 0 5px;
-						outline: none;
-						border: 1px solid silver;
-					}
-					.login_form .font2 {
-						margin-top: 30px;
-					}
-					.login_form button {
-						margin: 45px 0 30px 0;
-						height: 45px;
-						width: 365px;
-						font-size: 20px;
-						color: white;
-						outline: none;
-						cursor: pointer;
-						font-weight: bold;
-						background: #2471A3;
-						border-radius: 3px;
-						border: 1px solid #3949AB;
-						transition: .5s;
-					}
-					.login_form button:hover {
-						background: #1A5276;
-					}
-					.login_form #email_error,
-					.login_form #pass_error {
-						margin-top: 5px;
-						width: 345px;
-						font-size: 18px;
-						color: #C62828;
-						background: rgba(255, 0, 0, 0.1);
-						text-align: center;
-						padding: 5px 8px;
-						border-radius: 3px;
-						border: 1px solid #EF9A9A;
-						display: none;
-					}
-				</style>
 				<script type="text/javascript">
 					function validate() {
 						let fromDate = document.getElementById("from_date").value;
@@ -212,17 +35,20 @@
 				<c:if test="${alertContent!=null}">
 					<input id="alertbox" value="${alertContent}" type="hidden"/>
 				</c:if>
+<nav>
+	<h1>BSCS LEGACY LEAVE TRACKER</h1>
+	
+</nav>
 			
 				<div class="wrap">
 					<div id="mySidenav" class="sidenav">
-						<p class="dashboard">Dashboard</p>
 						<ul class="menu">
 							<li type=none>Employee</li>
 							<ul class="sub-menu">
 								<li>
 									<form method="post" action="Dashboard">
-										<input type="hidden" name="selectedTabName" value="ViewLeaves" id="vl">
-										<input type="submit" value="View Leaves" />
+										<input type="hidden" name="selectedTabName" value="EmployeeMonthlyReport" id="vl">
+										<input type="submit" value="Employee Monthly Report" />
 									</form>
 								</li>
 								<li>
@@ -240,7 +66,7 @@
 								<li type=none>
 									<form method="post" action="Dashboard">
 										<input type="hidden" name="selectedTabName" value="Manager" id="al">
-										<input type="submit" value="Employee Details" />
+										<input type="submit" value="All Employees Report" />
 									</form>
 								</li>
 							</ul>
@@ -260,30 +86,30 @@
 
 								</section>
 							</c:when>
-							<c:when test="${tabName=='ViewLeaves'}">
+							<c:when test="${tabName=='EmployeeMonthlyReport'}">
 								<!-- 
-												VIEW LEAVES SECTION
+												EmployeeMonthlyReport
 											 -->
 
-								<section class="main tabContent" id="ViewLeaves" style="text-align:center; width:100%;">
+								<section class="main tabContent" id="EmployeeMonthlyReport" style="text-align:center; width:100%;">
 
 									<form method="post" action="Dashboard">
-										<div class="inputContainer">
-											Select Employee: <select name="selectedEmp" id="selectedEmp">
-												<option value="" disabled selected>
-													select employee
-												</option>
-												<c:forEach items="${empsDetails}" var="emp">
-													<option value="${emp.name}">${emp.signum}</option>
-												</c:forEach>
-											</select>
-											<div class="buttonsContainer">
-												<input type="hidden" name="requestMode" value="ViewLeaves" id="vl">
-
-												<input type="submit" value="View Employee Details" />
-											</div>
-										</div>
-									</form>
+												<div class="inputContainer">
+													<select name="selectedEmp" id="selectedEmp">
+														<option value="" disabled selected>
+															select employee
+														</option>
+														<c:forEach items="${empsDetails}" var="emp">
+															<option value="${emp.name}">${emp.signum}</option>
+														</c:forEach>
+													</select>
+													<input name="monthAndYear" type="month" required />
+													<div class="buttonsContainer">
+														<input type="hidden" name="requestMode" value="EmployeeMonthlyReport" id="vl">
+														<input type="submit" value="View Employee Details" />
+														</div>
+														</div>
+														</form>
 
 									<c:if test="${empLeaves!=null || fn:length(empLeaves)>0}">
 
@@ -555,46 +381,43 @@
 
 									</c:when>
 
-									<c:when test="${managerStatus=='viewAllLeaves'}">
-										<section class="main tabContent" id="ViewAllLeaves"
+									<c:when test="${managerStatus=='AllEmployeeReport'}">
+										<!-- All Employees report -->
+										<section class="main tabContent" id="AllEmployeeReport"
 											style="text-align:center; width:100%;">
 											<form method="post" action="Dashboard">
 												<div class="inputContainer">
-													 <select name="selectedEmp" id="selectedEmp">
-														<option value="" disabled selected>
-															select employee
-														</option>
-														<c:forEach items="${empsDetails}" var="emp">
-															<option value="${emp.name}">${emp.signum}</option>
-														</c:forEach>
-													</select>
-													<input name="monthAndYear" type="month" required />
+												From
+												<input name="from" type="date" placeholder="From date" required />
+												To:
+												<input name="to" type="date" placeholder="To date" required />
 													<div class="buttonsContainer">
-														<input type="hidden" name="requestMode" value="ViewAllLeaves"
+														<input type="hidden" name="requestMode" value="AllEmployeeReport"
 															id="vl">
-														<input type="submit" value="View Employee Details" />
+														<input type="submit" value="Get Report" />
 													</div>
 												</div>
 											</form>
 
-											<c:if test="${empLeaves!=null || fn:length(empAllLeaves)>0}">
+											<c:if test="${allLeaves!=null || fn:length(allLeaves)>0}">
 
 												<div class="table-container">
 													<div class="leaves-container">
-
-
-														<h3>${msname}(${mssignum})</h3> <br>
 														<table>
 															<tr>
-																<td> <b>From Date</b> </td>
-																<td><b>To Date</b></td>
-																<td> <b>Half/Full</b> </td>
+																<td> <b>SIGNUM</b> </td>
+																<td> <b>NAME</b> </td>
+																<td> <b>FROM</b> </td>
+																<td><b>TO</b></td>
+																<td> <b>HALF/FULL</b> </td>
 																<td> <b>CL/PL/EL</b> </td>
-																<td> <b>Reason</b> </td>
-																<td> <b>Number Of Days</b> </td>
+																<td> <b>REASON</b> </td>
+																<td> <b>NUMBER OF DAYS</b> </td>
 															</tr>
-															<c:forEach items="${empAllLeaves}" var="leave">
+															<c:forEach items="${allLeaves}" var="leave">
 																<tr>
+																<td>${leave.signum}</td>
+																<td>${leave.name}</td>
 																	<td>${leave.from_date}</td>
 																	<td>${leave.to_date}</td>
 																	<td>${leave.type}</td>
