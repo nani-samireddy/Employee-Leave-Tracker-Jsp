@@ -226,6 +226,59 @@ public class DatabaseService {
 		return new DBResponse("Leave added successfully","leave-added");
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	public Leave[] getLeavesBetweenDates(String from, String to) throws SQLException, ClassNotFoundException {
+		// Connection to Db
+		load();
+		Connection con = DriverManager.getConnection(url, user, pass);
+
+		// getting the number of Rows
+		String query = "select count(*) from emp_leaves where (from_date between (?) and (?)) or (to_date between (?) and (?))";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setDate(1, Date.valueOf(from));
+		ps.setDate(2, Date.valueOf(to));
+		ps.setDate(3, Date.valueOf(from));
+		ps.setDate(4, Date.valueOf(to));
+
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int numberOfRows = rs.getInt(1);
+		Leave[] empLeaves = new Leave[numberOfRows];
+
+		// getting the emp leaves list
+		query = "SELECT emp.signumid, emp.name,leaves.leaveid, leaves.from_date, leaves.to_date, leaves.type, leaves.mode, leaves.reason,leaves.number_of_days FROM emp_leaves AS leaves INNER JOIN employee AS emp ON emp.signumid = leaves.signum WHERE (leaves.from_date BETWEEN ? AND ?) OR (leaves.to_date BETWEEN ? AND ?)";
+		PreparedStatement ps1 = con.prepareStatement(query);
+		ps1.setDate(1, Date.valueOf(from));
+		ps1.setDate(2, Date.valueOf(to));
+		ps1.setDate(3, Date.valueOf(from));
+		ps1.setDate(4, Date.valueOf(to));
+
+		rs = ps1.executeQuery();
+		rs.next();
+		// creating the leaveslist
+		int index = 0;
+		while (rs.next()) {
+			empLeaves[index] = new Leave(rs.getInt("leaveid"), rs.getString("signumid"),
+					rs.getDate("from_date").toString(), rs.getDate("to_date").toString(), rs.getString("type"),
+					rs.getString("name"),
+					rs.getString("mode"), rs.getString("reason"), rs.getDouble("number_of_days"));
+
+			index++;
+		}
+		con.close();
+		return empLeaves;
+
+	}
+
+	
 
 	public boolean login(String signum, String password) throws ClassNotFoundException, SQLException {
 		load();

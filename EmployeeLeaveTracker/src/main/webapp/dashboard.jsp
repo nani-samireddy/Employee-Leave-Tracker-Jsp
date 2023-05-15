@@ -118,7 +118,7 @@
 
 
 												<h3>${sname}(${ssignum})</h3> <br>
-												<table>
+													<table class="output">
 													<tr>
 														<th> <b>From Date</b> </th>
 														<th> <b>To Date</b> </th>
@@ -403,16 +403,16 @@
 
 												<div class="table-container">
 													<div class="leaves-container">
-														<table>
+														<table class="output">
 															<tr>
-																<td> <b>SIGNUM</b> </td>
-																<td> <b>NAME</b> </td>
-																<td> <b>FROM</b> </td>
-																<td><b>TO</b></td>
-																<td> <b>HALF/FULL</b> </td>
-																<td> <b>CL/PL/EL</b> </td>
-																<td> <b>REASON</b> </td>
-																<td> <b>NUMBER OF DAYS</b> </td>
+																<th> <b>SIGNUM</b> </th>
+																<th> <b>NAME</b> </th>
+																<th> <b>FROM</b> </th>
+																<th><b>TO</b></th>
+																<th> <b>HALF/FULL</b> </th>
+																<th> <b>CL/PL/EL</b> </th>
+																<th> <b>REASON</b> </th>
+																<th> <b>NUMBER OF DAYS</b> </th>
 															</tr>
 															<c:forEach items="${allLeaves}" var="leave">
 																<tr>

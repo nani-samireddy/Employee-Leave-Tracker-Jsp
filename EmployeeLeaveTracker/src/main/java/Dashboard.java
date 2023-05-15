@@ -99,7 +99,7 @@ public class Dashboard extends HttpServlet {
 						String username = req.getParameter("loginSignum");
 						String password = req.getParameter("loginPassword");
 						if (db.login(username, password)) {
-							req.setAttribute("managerStatus", "viewAllLeaves");
+							req.setAttribute("managerStatus", "AllEmployeeReport");
 							System.out.println("Sucessfully loggged In");
 							tab = "Manager";
 						} else {
@@ -109,20 +109,33 @@ public class Dashboard extends HttpServlet {
 						}
 						break;
 
-					case "ViewAllLeaves":
+					case "EmployeeMonthlyReport":
 						System.out.println("gettting all leaves");
 						String signum2 = req.getParameter("selectedEmp");
 						String monthAndYear = req.getParameter("monthAndYear");
 						Date monthYear =  Date.valueOf(monthAndYear+"-01");
 						Leave[] emp_allLeaves = db.getLeavesInMonth(signum2, monthYear);
 						Employee e2 = db.getEmployeDetails(signum2);
-						req.setAttribute("msname", e2.getName());
-						req.setAttribute("mssignum", e2.getSignum());
-						req.setAttribute("empAllLeaves", emp_allLeaves);
-						req.setAttribute("managerStatus", "viewAllLeaves");
+						req.setAttribute("sname", e2.getName());
+						req.setAttribute("ssignum", e2.getSignum());
+						req.setAttribute("empLeaves", emp_allLeaves);
 						req.setAttribute("noLeaves", emp_allLeaves == null);
 						
+						tab = "EmployeeMonthlyReport";
+						break;
+					case "AllEmployeeReport":
+						System.out.println("gettting all leaves");
+						String from = req.getParameter("from");
+						String to = req.getParameter("to");
+						Leave[] allLeaves = db.getLeavesBetweenDates(from, to);
+						
+						req.setAttribute("from", from);
+						req.setAttribute("to", to);
+						req.setAttribute("allLeaves", allLeaves);
+						req.setAttribute("managerStatus", "AllEmployeeReport");
+						req.setAttribute("noLeaves", allLeaves == null);
 						tab = "Manager";
+						System.out.println(allLeaves.length);
 						break;
 
 				}
